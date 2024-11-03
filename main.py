@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 GESTURES = ["Thank you", "Thank you2", "Bye", "Morning1", "Morning2", "Morning3", "Morning4", "Night", "welcome1", "welcome2",
             "Friend1", "Friend2", "Yes", "No1", "No2", "Treasure1", "Treasure2", "Treasure3", "Raining1", "Raining2",
             "Need1", "Need2", "Father1", "Father2", "Sunny1", "Sunny2", "Like1", "Like2", "Eat", "Drink1",
-            "Drink2", "doctor1", "doctor2", "mom1", "mom2", "teacher1", "teacher2", "happy1", "happy2", "angry1"]
+            "Drink2", "doctor1", "doctor2", "mom1", "mom2", "teacher1", "teacher2", "happy1", "happy2", "angry1","master1","master2"]
 
 # 建立資料夾以保存訓練數據
 DATA_DIR = "data"
