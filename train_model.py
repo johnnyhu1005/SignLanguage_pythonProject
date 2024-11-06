@@ -35,17 +35,20 @@ y = np.array(y)
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 建立 TensorFlow 模型
+# 建立更深的 DNN 模型
 model = tf.keras.models.Sequential([
     tf.keras.layers.Input(shape=(126,)),  # 21個點 x 3個座標 x 2隻手
+    tf.keras.layers.Dense(256, activation='relu'),
+    tf.keras.layers.Dropout(0.3),  # 添加 Dropout 層以防止過擬合
     tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.3),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(len(GESTURES), activation='softmax')
 ])
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-# 訓練模型並保存訓練過程的歷史數據
+# 訓練模型
 history = model.fit(X_train, y_train, epochs=50, validation_data=(X_test, y_test))
 
 # 保存模型
