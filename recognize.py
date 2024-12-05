@@ -9,10 +9,10 @@ import socket
 model = tf.keras.models.load_model('gesture_recognition_model.h5')
 
 # 設定手勢數量及名稱
-GESTURES = ["Thank you", "Thank you2", "Bye", "Morning1", "Morning2", "Morning3", "Morning4", "Night", "welcome1", "welcome2",
+GESTURES = ["Thank you", "Thank you2", "Morning1", "Morning2", "Morning3", "Morning4", "Night", "welcome1", "welcome2",
             "Friend1", "Friend2", "Yes", "No1", "No2", "Treasure1", "Treasure2", "Treasure3", "Raining1", "Raining2",
             "Need1", "Need2", "Father1", "Father2", "Sunny1", "Sunny2", "Like1", "Like2", "Eat", "Drink1",
-            "Drink2", "doctor1", "doctor2", "mom1", "mom2", "teacher1", "teacher2", "happy1", "happy2", "angry1","master1","master2"]
+            "Drink2", "mom1", "mom2", "teacher1", "teacher2", "happy1", "happy2", "angry1","master1","master2"]
 
 # 初始化 MediaPipe 和繪圖工具
 mp_hands = mp.solutions.hands
@@ -26,7 +26,7 @@ UDP_PORT = 5005        # Unity 使用的端口 (需和 Unity 端保持一致)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # 開啟攝影機
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 # 初始化變數
 combo_triggered = False
@@ -54,6 +54,9 @@ happy_sequence = ["happy1", "happy2"]
 like_sequence = ["Like1", "Like2"]
 sunny_sequence = ["Sunny1", "Sunny2"]
 drink_sequence = ["Drink1", "Drink2"]
+thanks_sequence = ["Thank you", "Thank you2"]
+master_sequence = ["master1", "master2"]
+eat_sequence = ["Eat", "Eat", "Eat", "Eat"]
 
 # 定義當前的手勢步驟
 current_morning_step = 0  # 當前的 "Morning" 手勢步驟
@@ -72,6 +75,9 @@ current_happy_step = 0
 current_like_step = 0
 current_sunny_step = 0
 current_drink_step = 0
+current_thanks_step = 0
+current_master_step = 0
+current_eat_step = 0
 
 current_combo = None  # 當前顯示的手勢組合
 
@@ -222,13 +228,6 @@ with mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.1, m
                     current_combo = "Teacher"
                     combo_display_time = current_time
                     current_teacher_step = 0  # 重置步驟
-            elif predicted_gesture == teacher_sequence[current_teacher_step]:
-                current_teacher_step += 1  # 如果順序正確，進入下一個步驟
-                current_errors = 0  # 重置錯誤計數
-                if current_teacher_step == len(teacher_sequence):
-                    current_combo = "Teacher"
-                    combo_display_time = current_time
-                    current_teacher_step = 0  # 重置步驟
             elif predicted_gesture == happy_sequence[current_happy_step]:
                 current_happy_step += 1  # 如果順序正確，進入下一個步驟
                 current_errors = 0  # 重置錯誤計數
@@ -257,6 +256,27 @@ with mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.1, m
                     current_combo = "Drink"
                     combo_display_time = current_time
                     current_drink_step = 0  # 重置步驟
+            elif predicted_gesture == thanks_sequence[current_thanks_step]:
+                current_thanks_step += 1  # 如果順序正確，進入下一個步驟
+                current_errors = 0  # 重置錯誤計數
+                if current_thanks_step == len(thanks_sequence):
+                    current_combo = "Thanks"
+                    combo_display_time = current_time
+                    current_thanks_step = 0  # 重置步驟
+            elif predicted_gesture == master_sequence[current_master_step]:
+                current_master_step += 1  # 如果順序正確，進入下一個步驟
+                current_errors = 0  # 重置錯誤計數
+                if current_master_step == len(master_sequence):
+                    current_combo = "Master"
+                    combo_display_time = current_time
+                    current_master_step = 0  # 重置步驟
+            elif predicted_gesture == eat_sequence[current_eat_step]:
+                current_eat_step += 1  # 如果順序正確，進入下一個步驟
+                current_errors = 0  # 重置錯誤計數
+                if current_eat_step == len(eat_sequence):
+                    current_combo = "Eat"
+                    combo_display_time = current_time
+                    current_eat_step = 0  # 重置步驟
 
             else:
                 # 偵測到錯誤動作，增加錯誤計數，超過容錯範圍時重置
