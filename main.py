@@ -8,19 +8,21 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
 # 設定手勢數量及名稱
-GESTURES = ["Thank you", "Thank you2", "Bye", "Morning1", "Morning2", "Morning3", "Morning4", "Night","welcome1", "welcome2",
-            "Friend1", "Friend2", "Yes","No1","No2"]  # 請替換為實際手語名稱
+GESTURES = ["Thank you", "Thank you2", "Bye", "Morning1", "Morning2", "Morning3", "Morning4", "Night", "welcome1", "welcome2",
+            "Friend1", "Friend2", "Yes", "No1", "No2", "Treasure1", "Treasure2", "Treasure3", "Raining1", "Raining2",
+            "Need1", "Need2", "Father1", "Father2", "Sunny1", "Sunny2", "Like1", "Like2", "Eat", "Drink1",
+            "Drink2", "doctor1", "doctor2", "mom1", "mom2", "teacher1", "teacher2", "happy1", "happy2", "angry1","master1","master2"]
 
-# 建立資料夾以保存訓練數據"
+# 建立資料夾以保存訓練數據
 DATA_DIR = "data"
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-# 開啟攝影機
+# 開啟攝影機並調整解析度
 cap = cv2.VideoCapture(0)
 
 # 初始化 MediaPipe Hands
-with mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5, max_num_hands=2) as hands:
+with mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.1, max_num_hands=2) as hands:
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
