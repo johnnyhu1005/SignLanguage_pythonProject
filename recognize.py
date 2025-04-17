@@ -26,7 +26,7 @@ UDP_PORT = 5005        # Unity 使用的端口 (需和 Unity 端保持一致)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 # 開啟攝影機
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 # 初始化變數
 combo_triggered = False
@@ -100,6 +100,7 @@ with mp_hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.1, m
         # 轉換回 BGR 以顯示影像
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        image = cv2.resize(image, (800, 600), interpolation=cv2.INTER_AREA)
 
         # # 取得影像的寬度和高度
         # height, width = image.shape[:2]
